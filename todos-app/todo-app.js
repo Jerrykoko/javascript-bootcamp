@@ -5,13 +5,13 @@ const todos = [{
     completed: false
 }, {
     text: 'Clean kitchen',
-    Completed: true
+    completed: true
 }, {
     text: 'Buy food',
-    Completed: 'false'
+    completed: true
 }, {
-    text: 'Do work',
-    completed: false
+   text: 'Do work',
+   completed: false
 }, {
     text: 'Exercise',
     completed: true
@@ -19,14 +19,22 @@ const todos = [{
 
 
 const filters = {
-    searchText : ''
+    searchText : '',
+    hideCompleted : false
 }
 
 const renderTodos = function(todos, filters){
-    const filteredTodos = todos.filter(function(todo){
+    let filteredTodos = todos.filter(function(todo){
         return todo.text.toLowerCase().includes(filters.searchText.toLowerCase())
     })
 
+    filteredTodos = filteredTodos.filter(function (todo){
+        if(filters.hideCompleted){
+            return !todo.completed
+        }else{
+            return true
+        }
+    })
     const incompleteTodos = filteredTodos.filter(function (todo) {
         return !todo.completed
     })
@@ -58,31 +66,7 @@ document.querySelector('#todo-list').addEventListener('input', function (e){
     renderTodos(todos, filters)
     e.target.elements.inputName.value = ''
 })
-/*
-document.querySelector('#todo-list').addEventListener('input', function(e){
-    
-})
-
-const incompleteTodos = todos.filter(function (todo) {
-    return !todo.completed
-})
-const summary = document.createElement('h1')
-summary.textContent = `You have ${incompleteTodos.length} todos left`
-document.querySelector('body').appendChild(summary)
-
-todos.forEach(function (todo) {
-    const p = document.createElement('p')
-    p.textContent = todo.text
-    document.body.appendChild(p)
-})
-
-const paragraphs = document.querySelectorAll('p')
-paragraphs.forEach(function (paragraph) {
-   if (paragraph.textContent.includes('the'))
-    paragraph.remove()
-})*/
-
-document.querySelector('#btn').addEventListener('click', function (e){
-    console.log('Did this work?')
-
+document.querySelector('#chkboxId').addEventListener('change', function(e){
+   filters.hideCompleted = e.target.checked
+   renderTodos(todos, filters)
 })
